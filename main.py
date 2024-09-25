@@ -2,7 +2,7 @@
 import requests
 import os
 from icalendar import Calendar, Event
-from datetime import datetime
+from datetime import datetime, date
 
 
 
@@ -35,20 +35,27 @@ if __name__ == '__main__':
 		'X-Requested-With': 'XMLHttpRequest',
 	}
 
-
-	timeTable_url = 'https://classtimetable-coes-wmweb.must.edu.mo/class-timetable-api/lessons/student-exam-webs?termCode=2409&startDate=2024-09-23&endDate=2024-09-29&lang=zh_MO&nonce=79f233e6f950fb0bd0e6e8c16e59c0bf&signature=a5f503284b4e07c06a82129bd9561dbe'
+	# get latest term code
+	request = requests.get('https://classtimetable-coes-wmweb.must.edu.mo/class-timetable-api/common/terms?lang=zh_MO', headers=headers)
 	
+	if request.status_code != 200:
+		print('Failed to get data from server')
+		exit()
+	
+	termCode = request.json()["model"][0]
+	# print(termCode)
+
+
+	timeTable_url = 'https://classtimetable-coes-wmweb.must.edu.mo/class-timetable-api/lessons/student-exam-webs?lang=zh_MO&termCode='+ termCode +'&startDate=' +  date.today().isoformat() + '&endDate=' + date.today().replace(year=date.today().year + 1).isoformat()
+	# print(timeTable_url)
+
+
 	cal = Calendar()
 
 	request = requests.get(timeTable_url, headers=headers)
 	# print(request.status_code)
+	# print(request.text)
 
-	if request.status_code != 200:
-		print('Failed to get data from server')
-		exit()
-
-
-	
 
 	for i in request.json()['model']['lesson']:
 		event = Event()
