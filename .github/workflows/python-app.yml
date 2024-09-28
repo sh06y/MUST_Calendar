@@ -50,4 +50,5 @@ jobs:
       uses: ad-m/github-push-action@master
 
 env:
-  COOKIE: ${{ secrets.COOKIE }}
+  USERNAME: ${{ secrets.USERNAME }}
+  PASSWORD: ${{ secrets.PASSWORD }}
