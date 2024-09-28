@@ -37,7 +37,7 @@ def classTimeTable(cookie):
 	# print(termCode)
 
 
-	timeTable_url = 'https://classtimetable-coes-wmweb.must.edu.mo/class-timetable-api/lessons/student-exam-webs?lang=zh_MO&termCode='+ termCode +'&startDate=' +  date.today().isoformat() + '&endDate=' + date.today().replace(year=date.today().year + 1).isoformat()
+	timeTable_url = 'https://classtimetable-coes-wmweb.must.edu.mo/class-timetable-api/lessons/student-exam-webs?lang=zh_MO&termCode='+ termCode +'&startDate=' +  date.today().replace(year=date.today().year - 1).isoformat() + '&endDate=' + date.today().replace(year=date.today().year + 1).isoformat()
 	# print(timeTable_url)
 
 
