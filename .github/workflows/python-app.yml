@@ -38,7 +38,7 @@ jobs:
 
     - name: commit
       run: |
-        git config --global user.email Robot@github.com
+        git config --global user.email calRobot@github.com
         git config --global user.name githubAction
         git add .
         git commit -m "update" -a
