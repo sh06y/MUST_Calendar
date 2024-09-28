@@ -37,7 +37,7 @@ jobs:
       run: |
         sudo cp -p ./chrome/chromedriver /usr/bin/
         chmod -R 777 /usr/bin/chromedriver
-        python main.py
+        python ./main.py
 
     - name: commit
       run: |
