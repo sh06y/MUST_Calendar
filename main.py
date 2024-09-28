@@ -3,19 +3,10 @@ import requests
 import os
 from icalendar import Calendar, Event
 from datetime import datetime, date
+import login
 
 
-
-
-if __name__ == '__main__':
-	# try get cookie from environment variable, if not found, use the cookie from config.py
-	try:
-		cookie = os.environ['COOKIE']
-	except:
-		import config
-		cookie = config.cookie
-
-
+def classTimeTable(cookie):
 	# print(cookie)
 	headers = {
 		'Cookie': cookie,
@@ -60,7 +51,7 @@ if __name__ == '__main__':
 	for i in request.json()['model']['lesson']:
 		event = Event()
 
-		# print(i['courseName'])
+		print(i['courseName'])
 		event.add('summary', i['courseName'])
 		# convert iso date and time to ical format
 
@@ -75,11 +66,42 @@ if __name__ == '__main__':
 		cal.add_component(event)
 
 
-	print(cal.to_ical().decode('utf-8')) 
+	# print(cal.to_ical().decode('utf-8')) 
 	
 	f = open('output.ics', 'wb')
 	f.write(cal.to_ical())
 	f.close()
+	
+
+if __name__ == '__main__':
+	try:
+		driver = login.login(os.environ['USERNAME'], os.environ['PASSWORD'])
+	except:
+		import config
+		driver = login.login(config.username, config.password)
+
+	
+	# enter the 2nd page
+	driver.get('https://classtimetable-coes-wmweb.must.edu.mo/my-class-timetable-student')
+	
+	cookies = driver.get_cookies()
+	# find exact cookie
+	for i in cookies:
+		if i['name'] == 'wm.class-timetable.sid':
+			table_cookie = 'wm.class-timetable.sid=' + i['value']
+			break
+	
+	classTimeTable(cookie=table_cookie)
+
+	driver.close()
+	
+
+	
+
+	
+
+
+	
 	
 
 
