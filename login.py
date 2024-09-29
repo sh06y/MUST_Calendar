@@ -12,7 +12,7 @@ def login(username, password):
 	chrome_options.add_argument('--no-sandbox')
 	chrome_options.add_argument('--disable-dev-shm-usage')
 
-	driver = webdriver.Chrome()
+	driver = webdriver.Chrome(options=chrome_options)
 	driver.get('https://login.must.edu.mo/login')
 
 	account = driver.find_element(By.ID, 'username')
