@@ -27,13 +27,16 @@ def classTimeTable(cookie):
 	}
 
 	# get latest term code
-	request = requests.get('https://classtimetable-coes-wmweb.must.edu.mo/class-timetable-api/common/terms?lang=zh_MO', headers=headers)
+	# request = requests.get('https://classtimetable-coes-wmweb.must.edu.mo/class-timetable-api/common/terms?lang=zh_MO', headers=headers)
 	
-	if request.status_code != 200:
-		print('Failed to get data from server')
-		exit()
+	# if request.status_code != 200:
+	# 	print('Failed to get data from server')
+	# 	exit()
 	
-	termCode = request.json()["model"][0]
+	# termCode = request.json()["model"][0]
+	
+	# debug
+	termCode = "2409"
 	# print(termCode)
 
 
