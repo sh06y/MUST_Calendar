@@ -62,3 +62,4 @@ jobs:
 env:
   USERNAME: ${{ secrets.USERNAME }}
   PASSWORD: ${{ secrets.PASSWORD }}
+  TERM: ${{ secrets.TERM }}
