@@ -35,8 +35,12 @@ def classTimeTable(cookie):
 	
 	# termCode = request.json()["model"][0]
 	
-	# debug
-	termCode = "2409"
+	try:
+		termCode = os.environ['TERM']
+	except:
+		import config
+		termCode = config.termCode
+
 	# print(termCode)
 
 
@@ -50,11 +54,15 @@ def classTimeTable(cookie):
 	# print(request.status_code)
 	# print(request.text)
 
+	if(request.json()['model']['lesson'] == []):
+		print('Error: No data found')
+		exit()
+	else:
+		print('Success: ' + str(len(request.json()['model']['lesson'])) + ' lessons found')
 
 	for i in request.json()['model']['lesson']:
 		event = Event()
 
-		print(i['courseName'])
 		event.add('summary', i['courseName'])
 		# convert iso date and time to ical format
 
@@ -71,7 +79,7 @@ def classTimeTable(cookie):
 
 	# print(cal.to_ical().decode('utf-8')) 
 	
-	f = open('output.ics', 'wb')
+	f = open('output_'+termCode+'.ics', 'wb')
 	f.write(cal.to_ical())
 	f.close()
 	
