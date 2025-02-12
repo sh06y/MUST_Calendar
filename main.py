@@ -1,8 +1,8 @@
 #coding=utf-8
 import requests
 import os
-from icalendar import Calendar, Event
-from datetime import datetime, date
+from icalendar import Calendar, Event, Alarm
+from datetime import datetime, date, timedelta
 import login
 
 
@@ -74,10 +74,17 @@ def classTimeTable(cookie):
 		event.add('description', 'TeacherName:' + i['teacherName'])
 		event.add('dtstamp', datetime.today().date(), parameters={'VALUE': 'DATE'})
 
+		# alarm 30 minutes before class
+		alart = Alarm()
+		alart.add('action', 'DISPLAY')
+		alart.add('description', '上課提醒')
+		alart.add('trigger', timedelta(minutes=-30))
+		event.add_component(alart)
+
 		cal.add_component(event)
 
 
-	# print(cal.to_ical().decode('utf-8')) 
+	print(cal.to_ical().decode('utf-8')) 
 	
 	f = open('output_'+termCode+'.ics', 'wb')
 	f.write(cal.to_ical())
