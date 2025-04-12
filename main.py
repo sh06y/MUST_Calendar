@@ -6,7 +6,7 @@ from datetime import datetime, date, timedelta
 import login
 
 
-def classTimeTable(cookie):
+def classTimeTable(cookie, termCode):
 	# print(cookie)
 	headers = {
 		'Cookie': cookie,
@@ -33,16 +33,6 @@ def classTimeTable(cookie):
 	# 	print('Failed to get data from server')
 	# 	exit()
 	
-	# termCode = request.json()["model"][0]
-	
-	try:
-		termCode = os.environ['TERM']
-	except:
-		import config
-		termCode = config.termCode
-
-	# print(termCode)
-
 
 	timeTable_url = 'https://classtimetable-coes-wmweb.must.edu.mo/class-timetable-api/lessons/student-exam-webs?lang=zh_MO&termCode='+ termCode +'&startDate=' +  date.today().replace(year=date.today().year - 1).isoformat() + '&endDate=' + date.today().replace(year=date.today().year + 1).isoformat()
 	# print(timeTable_url)
@@ -90,12 +80,23 @@ def classTimeTable(cookie):
 
 if __name__ == '__main__':
 	try:
+		termCode = os.environ['TERM']
+	except:
+		import config
+		termCode = config.termCode
+
+	for i in termCode.split(','):
+		if len(i) != 4:
+			print('Error: 学期代码不合法')
+			exit()
+
+	try:
 		driver = login.login(os.environ['USERNAME'], os.environ['PASSWORD'])
 	except:
 		import config
 		driver = login.login(config.username, config.password)
 
-	
+
 	# enter the 2nd page
 	driver.get('https://classtimetable-coes-wmweb.must.edu.mo/my-class-timetable-student')
 	
@@ -110,7 +111,8 @@ if __name__ == '__main__':
 		print('Error: 请检查账号密码是否正确')
 		exit()
 
-	classTimeTable(cookie=table_cookie)
+	for i in termCode.split(','):
+		classTimeTable(table_cookie, i)
 
 	driver.close()
 	
