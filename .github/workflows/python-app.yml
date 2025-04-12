@@ -62,4 +62,6 @@ jobs:
 env:
   USERNAME: ${{ secrets.USERNAME }}
   PASSWORD: ${{ secrets.PASSWORD }}
-  TERM: ${{ secrets.TERM }}
+
+  # 在这里修改学期代码，用逗号分隔
+  TERM: "2502,2506"
