@@ -82,9 +82,6 @@ def classTimeTable(cookie):
 		event.add_component(alart)
 
 		cal.add_component(event)
-
-
-	print(cal.to_ical().decode('utf-8')) 
 	
 	f = open('output_'+termCode+'.ics', 'wb')
 	f.write(cal.to_ical())
@@ -109,17 +106,11 @@ if __name__ == '__main__':
 			table_cookie = 'wm.class-timetable.sid=' + i['value']
 			break
 	
+	if table_cookie == '':
+		print('Error: 请检查账号密码是否正确')
+		exit()
+
 	classTimeTable(cookie=table_cookie)
 
 	driver.close()
 	
-
-	
-
-	
-
-
-	
-	
-
-
