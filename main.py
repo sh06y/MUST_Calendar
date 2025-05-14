@@ -53,7 +53,7 @@ class CalendarExporter:
 			alart.add('trigger', timedelta(minutes=-trigger))
 			event.add_component(alart)
 			cal.add_component(event)
-		with open(f'output_{termCode}.ics', 'wb') as f:
+		with open(f'/output/{username}_{termCode}.ics', 'wb') as f:
 			f.write(cal.to_ical())
 
 if __name__ == '__main__':
@@ -90,7 +90,7 @@ if __name__ == '__main__':
 		print('[Error] 请检查账号密码是否正确')
 		login_obj.close()
 		exit()
-	exporter = CalendarExporter(table_cookie)
+	exporter = CalendarExporter(table_cookie, username)
 	for i in termCode.split(','):
 		exporter.export(i, trigger=30)
 	login_obj.close()
