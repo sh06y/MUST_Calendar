@@ -6,7 +6,8 @@ from datetime import datetime, date, timedelta
 from login import Login
 
 class CalendarExporter:
-	def __init__(self, cookie):
+	def __init__(self, cookie, username):
+		self.username = username
 		self.cookie = cookie
 		self.headers = {
 			'Cookie': cookie,
@@ -53,8 +54,13 @@ class CalendarExporter:
 			alart.add('trigger', timedelta(minutes=-trigger))
 			event.add_component(alart)
 			cal.add_component(event)
-		with open(f'/output/{username}_{termCode}.ics', 'wb') as f:
+			
+		output_dir = './output'
+		if not os.path.exists(output_dir):
+			os.makedirs(output_dir)
+		with open(f'{output_dir}/{self.username}_{termCode}.ics', 'wb') as f:
 			f.write(cal.to_ical())
+		
 
 if __name__ == '__main__':
 	try:
