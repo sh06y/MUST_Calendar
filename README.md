@@ -21,10 +21,11 @@
 ## GitHub Action部署
 
 1. Fork仓库
-2. `Settings` - `Security` - `Secrets and variables` - `Actions` - `New repository secret`
-3. 在 name 中填写 `USERNAME`，`Secret`为学号
-4. 同理，再添加一个secret，名为`PASSWORD`，`Value` 为 Wemust 密码
-5. 修改[.github/workflows/python-app.yml](.github/workflows/python-app.yml)，配置自动运行时间
+2. `Actions`-同意Workflow
+3. `Settings` - `Security` - `Secrets and variables` - `Actions` - `New repository secret`
+4. 在 name 中填写 `USERNAME`，`Secret`为学号
+5. 同理，再添加一个secret，名为`PASSWORD`，`Value` 为 Wemust 密码
+6. 修改[.github/workflows/python-app.yml](.github/workflows/python-app.yml)，配置自动运行时间
 
 ### 使用方法（以IOS为例）
 
