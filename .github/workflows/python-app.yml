@@ -6,13 +6,10 @@ name: Refresh TimeTable
 on:
   workflow_dispatch:
   
-  # push:
-  #   branches: [ "main" ]
-  # pull_request:
-  #   branches: [ "main" ]
-  # everyday at 00:00
-  schedule:
-    - cron: '0 0 * * *'
+  # 定时运行
+  # 每天的 00:00 运行
+  # schedule:
+  #   - cron: '0 0 * * *'
 
   
 
@@ -55,7 +52,7 @@ jobs:
       run: |
         git config --global user.email calRobot@github.com
         git config --global user.name githubAction
-        git add .
+        git add -f .
         git commit -m "update" -a
 
     - name: Push changes
