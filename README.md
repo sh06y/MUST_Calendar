@@ -1,5 +1,7 @@
 # MUST_Calendar 
 
+[English](README_EN.md) | [简体中文](README.md)
+
 将 澳门科技大学wemust课表通过ics导入系统日历（iOS、Android、HarmonyOS、Mac OS、Windows）
 
 ## 本地部署
@@ -25,7 +27,7 @@
 3. `Settings` - `Security` - `Secrets and variables` - `Actions` - `New repository secret`
 4. 在 name 中填写 `USERNAME`，`Secret`为学号
 5. 同理，再添加一个secret，名为`PASSWORD`，`Value` 为 Wemust 密码
-6. 修改[.github/workflows/python-app.yml](.github/workflows/python-app.yml)，配置自动运行时间
+6. 修改[.github/workflows/python-app.yml](.github/workflows/python-app.yml)，在`13`行处设置学期代号；取消`27`行的注释，启动定时运行。
 
 ### 使用方法（以IOS为例）
 
@@ -37,5 +39,9 @@
 
 ## TODO
 
-- [x] 多学期
-- [ ] 多语言支持
+- [x] 多学期(2025.5.9)
+- [x] 多语言支持(2025.5.23)
+- [ ] 考试日历
+
+
+欢迎PR和Issues！
