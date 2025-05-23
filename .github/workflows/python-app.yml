@@ -1,4 +1,5 @@
-name: Update TimeTable
+# This workflow will run every day at 00:00 UTC
+name: Update TimeTable Everyday
 
 env:
   USERNAME: ${{ secrets.USERNAME }}
@@ -15,12 +16,13 @@ env:
   # LOCALE: "en_US"
 
 
-
 on:
   workflow_dispatch:
   
-  # 定时运行
+  # 在这里修改定时执行的时间
   # 每天的 00:00 运行
+
+  # Uncomment the following lines to enable scheduled runs
   # schedule:
   #   - cron: '0 0 * * *'
 
