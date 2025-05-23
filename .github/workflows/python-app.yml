@@ -1,7 +1,20 @@
-# This workflow will install Python dependencies, run tests and lint with a single version of Python
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+name: Update TimeTable
 
-name: Refresh TimeTable
+env:
+  USERNAME: ${{ secrets.USERNAME }}
+  PASSWORD: ${{ secrets.PASSWORD }}
+
+  ###### preferences 配置信息 ######
+
+  # 在这里修改学期代码，用逗号分隔。
+  # Set termcode here, separated by commas.
+  # Example: 2502,2506
+  TERM: "2502,2506"
+
+  # Change language here, uncomment to use english version
+  # LOCALE: "en_US"
+
+
 
 on:
   workflow_dispatch:
@@ -26,11 +39,8 @@ jobs:
       with:
         python-version: "3.12.6"
 
-    
     - name: setup-chromedriver
       uses: nanasess/setup-chromedriver@v2.2.2
-      # with:
-      #   chromedriver-version: "130.0.6723.91"
 
     - name: init driver
       run: |
@@ -58,10 +68,4 @@ jobs:
     - name: Push changes
       uses: ad-m/github-push-action@master
 
-env:
-  USERNAME: ${{ secrets.USERNAME }}
-  PASSWORD: ${{ secrets.PASSWORD }}
 
-  # 在这里修改学期代码，用逗号分隔。
-  # Example: 2502,2506
-  TERM: "2502,2506"

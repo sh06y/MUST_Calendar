@@ -65,9 +65,11 @@ class CalendarExporter:
 		if self.locale == 'en_US':
 			with open(f'{output_dir}/{self.studentID}_{termCode}_en.ics', 'wb') as f:
 				f.write(cal.to_ical())
+			print(f'Success: {self.studentID}_{termCode}_en.ics created')
 		else:
 			with open(f'{output_dir}/{self.studentID}_{termCode}.ics', 'wb') as f:
 				f.write(cal.to_ical())
+			print(f'Success: {self.studentID}_{termCode}.ics created')
 
 
 if __name__ == '__main__':
@@ -105,7 +107,7 @@ if __name__ == '__main__':
 		login_obj.close()
 		exit()
 
-	exporter = CalendarExporter(table_cookie, locale='en_US', studentID=username)
+	exporter = CalendarExporter(table_cookie, locale=os.environ.get('LOCALE', ''), studentID=username)
 	for i in termCode.split(','):
 		exporter.export(i, trigger=30)
 	login_obj.close()
