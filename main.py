@@ -6,14 +6,13 @@ from datetime import datetime, date, timedelta
 from login import Login
 
 class CalendarExporter:
-	def __init__(self, cookie, username):
-		self.username = username
+	def __init__(self, cookie, studentID, locale='zh_MO'):
 		self.cookie = cookie
+		self.studentID = studentID
+		self.locale = locale
 		self.headers = {
 			'Cookie': cookie,
 			'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36',
-			'Accept': 'application/json, text/plain, */*',
-			'Accept-Encoding': 'gzip, deflate, br',
 			'Referer': 'https://classtimetable-coes-wmweb.must.edu.mo/my-class-timetable-student',
 			'Sec-CH-UA': '"Google Chrome";v="99", "Chromium";v="99", ";Not A Brand";v="99"',
 			'Sec-CH-UA-Mobile': '?0',
@@ -21,14 +20,11 @@ class CalendarExporter:
 			'Sec-Fetch-Dest': 'empty',
 			'Sec-Fetch-Mode': 'cors',
 			'Sec-Fetch-Site': 'same-origin',
-			'Connection': 'keep-alive',
-			'Host': 'classtimetable-coes-wmweb.must.edu.mo',
-			'Dnt': '1',
 			'X-Requested-With': 'XMLHttpRequest',
 		}
 
 	def export(self, termCode, trigger=30):
-		timeTable_url = f'https://classtimetable-coes-wmweb.must.edu.mo/class-timetable-api/lessons/student-exam-webs?lang=zh_MO&termCode={termCode}&startDate={date.today().replace(year=date.today().year - 1).isoformat()}&endDate={date.today().replace(year=date.today().year + 1).isoformat()}'
+		timeTable_url = f'https://classtimetable-coes-wmweb.must.edu.mo/class-timetable-api/lessons/student-exam-webs?lang={self.locale}&termCode={termCode}&startDate={date.today().replace(year=date.today().year - 1).isoformat()}&endDate={date.today().replace(year=date.today().year + 1).isoformat()}'
 		cal = Calendar()
 		request = requests.get(timeTable_url, headers=self.headers)
 		lessons = request.json()['model']['lesson']
@@ -39,28 +35,40 @@ class CalendarExporter:
 			print('Success: ' + str(len(lessons)) + ' lessons found')
 		for i in lessons:
 			event = Event()
-			event.add('summary', i['courseName'])
+			alert = Alarm()
+			
+			if self.locale == 'en_US':
+				event.add('summary', i['courseEnName'])
+				event.add('location', i['roomEngDesc'])
+				event.add('description', 'TeacherName: ' + i['teacherEnName'])
+				alert.add('description', 'Class Reminder')
+			else:
+				event.add('summary', i['courseName'])
+				event.add('location', i['roomChnDesc'])
+				event.add('description', '教師姓名: ' + i['teacherName'])
+				alert.add('description', '上課提醒')
+
 			startTime = datetime.strptime(i['lessonDate'] + i['lessonStartTime'], '%Y-%m-%d%H:%M')
 			event.add('dtstart', startTime)
 			endTime = datetime.strptime(i['lessonDate'] + i['lessonEndTime'], '%Y-%m-%d%H:%M')
 			event.add('dtend', endTime)
-			event.add('location', i['roomChnDesc'])
-			event.add('description', 'TeacherName:' + i['teacherName'])
+			
 			event.add('dtstamp', datetime.today().date(), parameters={'VALUE': 'DATE'})
-
-			alart = Alarm()
-			alart.add('action', 'DISPLAY')
-			alart.add('description', '上課提醒')
-			alart.add('trigger', timedelta(minutes=-trigger))
-			event.add_component(alart)
+			alert.add('action', 'DISPLAY')
+			alert.add('trigger', timedelta(minutes=-trigger))
+			event.add_component(alert)
 			cal.add_component(event)
 			
 		output_dir = './output'
 		if not os.path.exists(output_dir):
 			os.makedirs(output_dir)
-		with open(f'{output_dir}/{self.username}_{termCode}.ics', 'wb') as f:
-			f.write(cal.to_ical())
-		
+		if self.locale == 'en_US':
+			with open(f'{output_dir}/{self.studentID}_{termCode}_en.ics', 'wb') as f:
+				f.write(cal.to_ical())
+		else:
+			with open(f'{output_dir}/{self.studentID}_{termCode}.ics', 'wb') as f:
+				f.write(cal.to_ical())
+
 
 if __name__ == '__main__':
 	try:
@@ -81,7 +89,7 @@ if __name__ == '__main__':
 		import config
 		username = config.username
 		password = config.password
-	
+
 
 	login_obj = Login(username, password)
 	driver = login_obj.get_driver()
@@ -96,7 +104,8 @@ if __name__ == '__main__':
 		print('[Error] 请检查账号密码是否正确')
 		login_obj.close()
 		exit()
-	exporter = CalendarExporter(table_cookie, username)
+
+	exporter = CalendarExporter(table_cookie, locale='en_US', studentID=username)
 	for i in termCode.split(','):
 		exporter.export(i, trigger=30)
 	login_obj.close()
