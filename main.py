@@ -109,6 +109,6 @@ if __name__ == '__main__':
 
 	exporter = CalendarExporter(table_cookie, locale=os.environ.get('LOCALE', ''), studentID=username)
 	for i in termCode.split(','):
-		exporter.export(i, trigger=30)
+		exporter.export(i, trigger=int(os.environ.get('ALERT')))
 	login_obj.close()
 
