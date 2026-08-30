@@ -1,4 +1,4 @@
 icalendar==5.0.13
 requests==2.32.3
 selenium==4.25.0
-dotenv
+python-dotenv==1.2.3
